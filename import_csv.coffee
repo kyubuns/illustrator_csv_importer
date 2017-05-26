@@ -42,7 +42,9 @@ class Importer
   replaceText: (dict, root) ->
     for textFrame in root.textFrames
       if dict[textFrame.name]
+        # alert(textFrame.textRange.characterAttributes.textFont)
         textFrame.contents = dict[textFrame.name]
+        # alert(textFrame.textRange.characterAttributes.textFont)
 
 importer = new Importer()
 importer.run()
