@@ -7,7 +7,7 @@ String.prototype.endsWith = (suffix) ->
 class Main
   run: ->
     root = app.activeDocument
-    fileName = File.openDialog("csv選択", "*.csv")
+    fileName = File.openDialog("tsv選択", "*.tsv")
     if fileName
       file = new File(fileName)
       dict = @createDict(file)
@@ -18,7 +18,7 @@ class Main
     file.open("r", "TEXT")
     dict = {}
     while(!file.eof)
-      elements = file.readln().split(',')
+      elements = file.readln().split('\t')
       dict[elements[0]] = elements[1]
     dict
 

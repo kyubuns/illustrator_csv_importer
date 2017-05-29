@@ -16,7 +16,7 @@
     Main.prototype.run = function() {
       var file, fileName, root;
       root = app.activeDocument;
-      fileName = File.saveDialog("保存先指定(*.csv)");
+      fileName = File.saveDialog("保存先指定(*.tsv)");
       if (fileName) {
         file = new File(fileName);
         file.encoding = "SHIFT-JIS";
@@ -32,7 +32,10 @@
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         textFrame = ref[i];
-        results.push(file.write((textFrame.contents.replace(/[\n\r]+/g, ' ')) + ",\n"));
+        if (textFrame.contents.replace(/[\n\r]+/g, ' ').replace(/ /, '') === "") {
+          continue;
+        }
+        results.push(file.write((textFrame.contents.replace(/[\n\r]+/g, ' ')) + "\t\n"));
       }
       return results;
     };

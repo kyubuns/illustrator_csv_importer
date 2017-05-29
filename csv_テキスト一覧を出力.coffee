@@ -7,7 +7,7 @@ String.prototype.endsWith = (suffix) ->
 class Main
   run: ->
     root = app.activeDocument
-    fileName = File.saveDialog("保存先指定(*.csv)")
+    fileName = File.saveDialog("保存先指定(*.tsv)")
     if fileName
       file = new File(fileName)
       file.encoding = "SHIFT-JIS"
@@ -17,7 +17,8 @@ class Main
 
   export: (root, file) ->
     for textFrame in root.textFrames
-      file.write("#{textFrame.contents.replace(/[\n\r]+/g, ' ')},\n")
+      continue if textFrame.contents.replace(/[\n\r]+/g, ' ').replace(/ /, '') == ""
+      file.write("#{textFrame.contents.replace(/[\n\r]+/g, ' ')}\t\n")
 
 main = new Main()
 main.run()
