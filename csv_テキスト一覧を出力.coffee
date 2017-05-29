@@ -16,11 +16,14 @@ class Main
       file.close()
 
   export: (root, file) ->
+    dict = {}
     for textFrame in root.textFrames
       continue if textFrame.locked
       continue if textFrame.visible
       continue if textFrame.contents.replace(/[\n\r]+/g, ' ').replace(/ /, '') == ""
-      file.write("#{textFrame.contents.replace(/[\n\r]+/g, ' ')}\t\n")
+      dict[textFrame.contents.replace(/[\n\r]+/g, ' ')] = ""
+    for k, v of dict
+      file.write("#{k}\t\n")
 
 main = new Main()
 main.run()

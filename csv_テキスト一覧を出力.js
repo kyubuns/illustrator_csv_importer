@@ -27,9 +27,9 @@
     };
 
     Main.prototype["export"] = function(root, file) {
-      var i, len, ref, results, textFrame;
+      var dict, i, k, len, ref, results, textFrame, v;
+      dict = {};
       ref = root.textFrames;
-      results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         textFrame = ref[i];
         if (textFrame.locked) {
@@ -41,7 +41,12 @@
         if (textFrame.contents.replace(/[\n\r]+/g, ' ').replace(/ /, '') === "") {
           continue;
         }
-        results.push(file.write((textFrame.contents.replace(/[\n\r]+/g, ' ')) + "\t\n"));
+        dict[textFrame.contents.replace(/[\n\r]+/g, ' ')] = "";
+      }
+      results = [];
+      for (k in dict) {
+        v = dict[k];
+        results.push(file.write(k + "\t\n"));
       }
       return results;
     };
