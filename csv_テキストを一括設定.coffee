@@ -40,11 +40,14 @@ class Importer
     dict
 
   replaceText: (dict, root) ->
+    newColor = new GrayColor()
+    newColor.gray = 100.0
+
     for textFrame in root.textFrames
+      continue if textFrame.locked
       if dict[textFrame.name]
-        # alert(textFrame.textRange.characterAttributes.textFont)
         textFrame.contents = dict[textFrame.name]
-        # alert(textFrame.textRange.characterAttributes.textFont)
+        textFrame.textRange.characterAttributes.fillColor = newColor
 
 importer = new Importer()
 importer.run()

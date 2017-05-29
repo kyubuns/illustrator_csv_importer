@@ -1,1 +1,1 @@
-coffee --compile import_csv.coffee
+coffee --compile *.coffee

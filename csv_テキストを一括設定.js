@@ -55,13 +55,19 @@
     };
 
     Importer.prototype.replaceText = function(dict, root) {
-      var i, len, ref, results, textFrame;
+      var i, len, newColor, ref, results, textFrame;
+      newColor = new GrayColor();
+      newColor.gray = 100.0;
       ref = root.textFrames;
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         textFrame = ref[i];
+        if (textFrame.locked) {
+          continue;
+        }
         if (dict[textFrame.name]) {
-          results.push(textFrame.contents = dict[textFrame.name]);
+          textFrame.contents = dict[textFrame.name];
+          results.push(textFrame.textRange.characterAttributes.fillColor = newColor);
         } else {
           results.push(void 0);
         }
