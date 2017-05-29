@@ -25,6 +25,7 @@ class Main
   setLayerName: (root, dict) ->
     for textFrame in root.textFrames
       continue if textFrame.locked
+      continue if textFrame.visible
       text = textFrame.contents.replace(/[\n\r]+/g, ' ')
       if dict[text]
         textFrame.name = dict[text]

@@ -32,6 +32,12 @@
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         textFrame = ref[i];
+        if (textFrame.locked) {
+          continue;
+        }
+        if (textFrame.visible) {
+          continue;
+        }
         if (textFrame.contents.replace(/[\n\r]+/g, ' ').replace(/ /, '') === "") {
           continue;
         }

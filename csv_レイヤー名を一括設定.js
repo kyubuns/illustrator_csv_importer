@@ -45,6 +45,9 @@
         if (textFrame.locked) {
           continue;
         }
+        if (textFrame.visible) {
+          continue;
+        }
         text = textFrame.contents.replace(/[\n\r]+/g, ' ');
         if (dict[text]) {
           results.push(textFrame.name = dict[text]);

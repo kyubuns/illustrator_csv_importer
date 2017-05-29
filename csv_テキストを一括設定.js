@@ -65,6 +65,9 @@
         if (textFrame.locked) {
           continue;
         }
+        if (textFrame.visible) {
+          continue;
+        }
         if (dict[textFrame.name]) {
           textFrame.contents = dict[textFrame.name];
           results.push(textFrame.textRange.characterAttributes.fillColor = newColor);

@@ -45,6 +45,7 @@ class Importer
 
     for textFrame in root.textFrames
       continue if textFrame.locked
+      continue if textFrame.visible
       if dict[textFrame.name]
         textFrame.contents = dict[textFrame.name]
         textFrame.textRange.characterAttributes.fillColor = newColor

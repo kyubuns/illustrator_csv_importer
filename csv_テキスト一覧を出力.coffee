@@ -17,6 +17,8 @@ class Main
 
   export: (root, file) ->
     for textFrame in root.textFrames
+      continue if textFrame.locked
+      continue if textFrame.visible
       continue if textFrame.contents.replace(/[\n\r]+/g, ' ').replace(/ /, '') == ""
       file.write("#{textFrame.contents.replace(/[\n\r]+/g, ' ')}\t\n")
 
