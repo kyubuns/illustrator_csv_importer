@@ -1,42 +1,81 @@
 KEY = "Key"
 VALUE = "Value"
 
+String.prototype.startsWith = (str) ->
+  return this.slice(0, str.length) == str
+
+String.prototype.endsWith = (suffix) ->
+  return this.indexOf(suffix, this.length - suffix.length) != -1
+
+String.prototype.trim = ->
+  return this.replace(/^\s+|\s+$/g,'')
+
+class Csv
+  @save: (filePath, data) ->
+    text = Csv.toText(data)
+    file = new File(filePath)
+    file.encoding = "UTF-8"
+    file.open("w", "TEXT")
+    text = @toText(data)
+    file.write(text)
+    file.close()
+
+  @toText: (data) ->
+    text = ""
+    for line, lineIndex in data
+      for element, elementIndex in line
+        text += "\"#{element.replace(/\"/g, "\"\"")}\""
+        text += "," if elementIndex != line.length - 1
+      text += "\r\n" if lineIndex != data.length - 1
+    text
+
+  @load: (filePath) ->
+    file = new File(filePath)
+    file.encoding = "UTF-8"
+    file.open("r", "TEXT")
+    text = ""
+    while(!file.eof)
+      text += file.readln()
+      text += "\n"
+    file.close()
+    @fromText(text)
+
+  @fromText: (text) ->
+    body = []
+    for line in text.split('\n')
+      lineArray = []
+      line = line.replace(/\"\"/g, "<double quote>")
+      continue if line.replace(/ /, "") == ""
+      elements = line.match(/"[^"]*"|[^,]+/g)
+      for element in elements
+        if element.startsWith("\"") && element.endsWith("\"")
+          element = element.slice(1, element.length - 1).replace(/\"\"/g, "\"")
+        lineArray.push(element.replace(/<double quote>/g, "\""))
+      body.push(lineArray)
+    body
+
 class Importer
   run: ->
     root = app.activeDocument
-    dict = @readCSV()
-    @replaceText(dict, root)
+    filePath = File.openDialog("ファイル選択 (*.csv)", "*")
+    if filePath
+      dict = @readCSV(filePath)
+      @replaceText(dict, root)
 
-  readCSV: ->
-    file = File.openDialog("Select a file", "*")
-    file.open('r')
-    dict = {}
+  readCSV: (filePath) ->
+    data = Csv.load(filePath)
 
-    # header
     keyIndex = 0
     valueIndex = 0
-    elements = file.readln().split(',')
-    for e, index in elements
+    for e, index in data[0]
       if e == KEY
         keyIndex = index
       if e == VALUE
         valueIndex = index
 
-    # body
-    while(!file.eof)
-      elements = file.readln().split(',')
-      key = elements[keyIndex]
-      value = elements[valueIndex]
-      continue if key == ""
-
-      if dict[key]
-        continue if value == ""
-        dict[key] += "\n"
-        dict[key] += value
-      else
-        dict[key] = value
-
-    file.close()
+    dict = {}
+    for line in data
+      dict[line[keyIndex]] = line[valueIndex]
     dict
 
   replaceText: (dict, root) ->
