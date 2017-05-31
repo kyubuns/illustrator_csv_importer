@@ -73,12 +73,14 @@
           continue;
         }
         elements = line.match(/"[^"]*"|[^,]+/g);
-        for (j = 0, len1 = elements.length; j < len1; j++) {
-          element = elements[j];
-          if (element.startsWith("\"") && element.endsWith("\"")) {
-            element = element.slice(1, element.length - 1).replace(/\"\"/g, "\"");
+        if (elements) {
+          for (j = 0, len1 = elements.length; j < len1; j++) {
+            element = elements[j];
+            if (element.startsWith("\"") && element.endsWith("\"")) {
+              element = element.slice(1, element.length - 1).replace(/\"\"/g, "\"");
+            }
+            lineArray.push(element.replace(/<double quote>/g, "\""));
           }
-          lineArray.push(element.replace(/<double quote>/g, "\""));
         }
         body.push(lineArray);
       }

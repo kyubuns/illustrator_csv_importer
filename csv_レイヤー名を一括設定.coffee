@@ -44,10 +44,11 @@ class Csv
       line = line.replace(/\"\"/g, "<double quote>")
       continue if line.replace(/ /, "") == ""
       elements = line.match(/"[^"]*"|[^,]+/g)
-      for element in elements
-        if element.startsWith("\"") && element.endsWith("\"")
-          element = element.slice(1, element.length - 1).replace(/\"\"/g, "\"")
-        lineArray.push(element.replace(/<double quote>/g, "\""))
+      if elements
+        for element in elements
+          if element.startsWith("\"") && element.endsWith("\"")
+            element = element.slice(1, element.length - 1).replace(/\"\"/g, "\"")
+          lineArray.push(element.replace(/<double quote>/g, "\""))
       body.push(lineArray)
     body
 
