@@ -70,6 +70,8 @@
       for (i = 0, len = ref.length; i < len; i++) {
         tmp = ref[i];
         lineArray = [];
+        tmp = tmp.replace(/\"\"\",/g, "<double quote>\",");
+        tmp = tmp.replace(/,\"\"\"/g, ",\"<double quote>");
         tmp = tmp.replace(/\"\"/g, "<double quote>");
         if (line !== "") {
           line += "\n";

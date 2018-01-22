@@ -74,6 +74,8 @@
       for (i = 0, len = ref.length; i < len; i++) {
         tmp = ref[i];
         lineArray = [];
+        tmp = tmp.replace(/\"\"\",/g, "<double quote>\",");
+        tmp = tmp.replace(/,\"\"\"/g, ",\"<double quote>");
         tmp = tmp.replace(/\"\"/g, "<double quote>");
         if (line !== "") {
           line += "\n";
@@ -137,7 +139,12 @@
       dict = {};
       for (j = 0, len1 = data.length; j < len1; j++) {
         line = data[j];
-        dict[line[keyIndex]] = line[valueIndex];
+        if (dict[line[keyIndex]]) {
+          dict[line[keyIndex]] += "\n";
+          dict[line[keyIndex]] += line[valueIndex];
+        } else {
+          dict[line[keyIndex]] = line[valueIndex];
+        }
       }
       return dict;
     };

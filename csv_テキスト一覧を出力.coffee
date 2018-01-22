@@ -43,6 +43,8 @@ class Csv
     tmp = ""
     for tmp in text.split('\n')
       lineArray = []
+      tmp = tmp.replace(/\"\"\",/g, "<double quote>\",")
+      tmp = tmp.replace(/,\"\"\"/g, ",\"<double quote>")
       tmp = tmp.replace(/\"\"/g, "<double quote>")
       line += "\n" if line != ""
       line += tmp

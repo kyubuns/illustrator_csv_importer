@@ -46,6 +46,8 @@ class Csv
     tmp = ""
     for tmp in text.split('\n')
       lineArray = []
+      tmp = tmp.replace(/\"\"\",/g, "<double quote>\",")
+      tmp = tmp.replace(/,\"\"\"/g, ",\"<double quote>")
       tmp = tmp.replace(/\"\"/g, "<double quote>")
       line += "\n" if line != ""
       line += tmp
@@ -83,7 +85,11 @@ class Importer
 
     dict = {}
     for line in data
-      dict[line[keyIndex]] = line[valueIndex]
+      if dict[line[keyIndex]]
+        dict[line[keyIndex]] += "\n"
+        dict[line[keyIndex]] += line[valueIndex]
+      else
+        dict[line[keyIndex]] = line[valueIndex]
     dict
 
   replaceText: (dict, root) ->
