@@ -42,9 +42,15 @@ class Csv
 
   @fromText: (text) ->
     body = []
-    for line in text.split('\n')
+    line = ""
+    tmp = ""
+    for tmp in text.split('\n')
       lineArray = []
-      line = line.replace(/\"\"/g, "<double quote>")
+      tmp = tmp.replace(/\"\"/g, "<double quote>")
+      line += "\n" if line != ""
+      line += tmp
+      continue unless line.endsWith(",")
+      tmp = ""
       continue if line.replace(/ /, "") == ""
       elements = line.match(/"[^"]*"|[^,]+/g)
       if elements
@@ -53,6 +59,7 @@ class Csv
             element = element.slice(1, element.length - 1).replace(/\"\"/g, "\"")
           lineArray.push(element.replace(/<double quote>/g, "\""))
       body.push(lineArray)
+      line = ""
     body
 
 class Importer

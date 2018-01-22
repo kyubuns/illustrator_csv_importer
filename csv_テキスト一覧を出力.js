@@ -62,13 +62,23 @@
     };
 
     Csv.fromText = function(text) {
-      var body, element, elements, i, j, len, len1, line, lineArray, ref;
+      var body, element, elements, i, j, len, len1, line, lineArray, ref, tmp;
       body = [];
+      line = "";
+      tmp = "";
       ref = text.split('\n');
       for (i = 0, len = ref.length; i < len; i++) {
-        line = ref[i];
+        tmp = ref[i];
         lineArray = [];
-        line = line.replace(/\"\"/g, "<double quote>");
+        tmp = tmp.replace(/\"\"/g, "<double quote>");
+        if (line !== "") {
+          line += "\n";
+        }
+        line += tmp;
+        if (!line.endsWith(",")) {
+          continue;
+        }
+        tmp = "";
         if (line.replace(/ /, "") === "") {
           continue;
         }
@@ -83,6 +93,7 @@
           }
         }
         body.push(lineArray);
+        line = "";
       }
       return body;
     };
